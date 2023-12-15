@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "B3686478-ACB8-4947-9D26-2AE982C7F4EE"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2E997704-0341-4318-8B3E-851D7A6AC268"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AudioBooks/Features/BookDetail/VoiceMemo.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "145"
+            endingLineNumber = "145"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "2E997704-0341-4318-8B3E-851D7A6AC268 - 5d8dba5846300226"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #4 @Sendable (ComposableArchitecture.Send&lt;AudioBooks.VoiceMemo.Action&gt;) async throws -&gt; () in closure #1 (inout AudioBooks.VoiceMemo.State, AudioBooks.VoiceMemo.Action) -&gt; ComposableArchitecture.Effect&lt;AudioBooks.VoiceMemo.Action&gt; in AudioBooks.VoiceMemo.body.getter : some"
+                  moduleName = "AudioBooks"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bohdan/Projects/audio-books/AudioBooks/Features/BookDetail/VoiceMemo.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "145"
+                  endingLineNumber = "145"
+                  offsetFromSymbolStart = "52">
+               </Location>
+               <Location
+                  uuid = "2E997704-0341-4318-8B3E-851D7A6AC268 - 9e1f07854ef66429"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) suspend resume partial function for closure #4 @Sendable (ComposableArchitecture.Send&lt;AudioBooks.VoiceMemo.Action&gt;) async throws -&gt; () in closure #1 (inout AudioBooks.VoiceMemo.State, AudioBooks.VoiceMemo.Action) -&gt; ComposableArchitecture.Effect&lt;AudioBooks.VoiceMemo.Action&gt; in AudioBooks.VoiceMemo.body.getter : some"
+                  moduleName = "AudioBooks"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bohdan/Projects/audio-books/AudioBooks/Features/BookDetail/VoiceMemo.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "145"
+                  endingLineNumber = "145"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  uuid = "2E997704-0341-4318-8B3E-851D7A6AC268 - dae28df249bc4e2c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for closure #4 @Sendable (ComposableArchitecture.Send&lt;AudioBooks.VoiceMemo.Action&gt;) async throws -&gt; () in closure #1 (inout AudioBooks.VoiceMemo.State, AudioBooks.VoiceMemo.Action) -&gt; ComposableArchitecture.Effect&lt;AudioBooks.VoiceMemo.Action&gt; in AudioBooks.VoiceMemo.body.getter : some"
+                  moduleName = "AudioBooks"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bohdan/Projects/audio-books/AudioBooks/Features/BookDetail/VoiceMemo.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "145"
+                  endingLineNumber = "145"
+                  offsetFromSymbolStart = "76">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
