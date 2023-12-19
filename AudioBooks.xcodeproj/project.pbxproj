@@ -16,6 +16,7 @@
 		47583D122B2B6676000EDA73 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47583D112B2B6676000EDA73 /* DateFormatter.swift */; };
 		47583D142B2BA840000EDA73 /* sample31.aac in Resources */ = {isa = PBXBuildFile; fileRef = 47583D132B2BA840000EDA73 /* sample31.aac */; };
 		47583D162B2BA8FF000EDA73 /* sample3_out.aac in Resources */ = {isa = PBXBuildFile; fileRef = 47583D152B2BA8FF000EDA73 /* sample3_out.aac */; };
+		479AAC7E2B2DCCA000930FF9 /* dwsample1-aac.aac in Resources */ = {isa = PBXBuildFile; fileRef = 479AAC7D2B2DCCA000930FF9 /* dwsample1-aac.aac */; };
 		479DB9E22B29AB7400E78B63 /* AudioBooksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479DB9E12B29AB7400E78B63 /* AudioBooksApp.swift */; };
 		479DB9E42B29AB7400E78B63 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479DB9E32B29AB7400E78B63 /* ContentView.swift */; };
 		479DB9E62B29AB7500E78B63 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 479DB9E52B29AB7500E78B63 /* Assets.xcassets */; };
@@ -53,6 +54,7 @@
 		47583D112B2B6676000EDA73 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		47583D132B2BA840000EDA73 /* sample31.aac */ = {isa = PBXFileReference; lastKnownFileType = file; path = sample31.aac; sourceTree = "<group>"; };
 		47583D152B2BA8FF000EDA73 /* sample3_out.aac */ = {isa = PBXFileReference; lastKnownFileType = file; path = sample3_out.aac; sourceTree = "<group>"; };
+		479AAC7D2B2DCCA000930FF9 /* dwsample1-aac.aac */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dwsample1-aac.aac"; sourceTree = "<group>"; };
 		479DB9DE2B29AB7400E78B63 /* AudioBooks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioBooks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		479DB9E12B29AB7400E78B63 /* AudioBooksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioBooksApp.swift; sourceTree = "<group>"; };
 		479DB9E32B29AB7400E78B63 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				47583D0E2B2B3D42000EDA73 /* sample3.aac */,
 				47583D132B2BA840000EDA73 /* sample31.aac */,
 				47583D152B2BA8FF000EDA73 /* sample3_out.aac */,
+				479AAC7D2B2DCCA000930FF9 /* dwsample1-aac.aac */,
 				479DB9E72B29AB7500E78B63 /* Preview Content */,
 			);
 			path = AudioBooks;
@@ -308,6 +311,7 @@
 				47583D022B2B02AE000EDA73 /* trackOne.mp3 in Resources */,
 				47583D0F2B2B3D42000EDA73 /* sample3.aac in Resources */,
 				47583D142B2BA840000EDA73 /* sample31.aac in Resources */,
+				479AAC7E2B2DCCA000930FF9 /* dwsample1-aac.aac in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

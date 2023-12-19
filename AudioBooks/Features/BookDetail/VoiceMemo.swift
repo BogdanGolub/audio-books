@@ -12,17 +12,20 @@ import SwiftUI
 struct VoiceMemo {
     struct State: Equatable, Identifiable {
         @PresentationState var alert: AlertState<Action.Alert>?
-        var date: Date
-        var duration: TimeInterval
-        var mode = Mode.notPlaying
         var title = ""
-        var url: URL
+        var image = ""
+        var duration: TimeInterval = .zero
+        var url: URL = .temporaryDirectory
+        
+        var mode = Mode.notPlaying
         var isPlayerEnabled: Bool = true
-        var currentTime: TimeInterval
+        var currentTime: TimeInterval = .zero
         var slide: TimeInterval = 0
-        var rate: Rates = .xOne
-        let allRates: [Rates] = Rates.allCases
         var isSeekInProgress: Bool? = false // nil for avoiding jumping slider from old player value to slide value
+        var rate: Rates = .xOne
+        
+        var songs: IdentifiedArrayOf<VoiceMemo.State.Song>
+        let allRates: [Rates] = Rates.allCases
         
         var id: URL { self.url }
         
@@ -32,6 +35,21 @@ struct VoiceMemo {
             case notPlaying
             case playing(progress: Double)
         }
+        
+        struct Song: Equatable, Identifiable {
+            
+            var id: URL { self.url }
+            let title: String
+            let url: URL
+            let image: String
+            
+            init(title: String, resourceName: String, image: String) {
+                self.title = title
+                self.url = Bundle.main.url(forResource: resourceName, withExtension: "aac")!
+                self.image = image
+            }
+        }
+        
         
         enum Rates: Float, CaseIterable, Identifiable {
             
@@ -70,6 +88,9 @@ struct VoiceMemo {
         case onEditingChanged(Bool)
         case clearSeek
         case setRate(State.Rates)
+        case next
+        case backward
+        
         enum Alert: Equatable {}
     }
     
@@ -80,6 +101,10 @@ struct VoiceMemo {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+            case .backward:
+                return .none
+            case .next:
+                return .none
             case .setRate(let rate):
                 state.rate = rate
                 return .run { [rate = state.rate] send in
@@ -264,7 +289,7 @@ struct ContentView: View {
                         }
                     }
                     .padding(.bottom, 20)
-
+                
                 HStack(spacing: 30) {
                     Button(action: {
                         
@@ -327,9 +352,13 @@ struct CustomToggleStyle: ToggleStyle {
 }
 
 #Preview {
-    ContentView(store: Store(initialState: VoiceMemo.State(date: Date(), duration: 5,
-                                                           url: Bundle.main.url(forResource: "sample3", withExtension: "aac")!,
-                                                           currentTime: 0), reducer: {
+    ContentView(store: Store(initialState: VoiceMemo.State(songs: [.init(title: "sample3",
+                                                                         resourceName: "sample3",
+                                                                         image: "sample3"),
+                                                                   .init(title: "dwsample1-aac",
+                                                                         resourceName: "dwsample1-aac",
+                                                                         image: "dwsample1-aac")]),
+                             reducer: {
         VoiceMemo()
     }))
 }

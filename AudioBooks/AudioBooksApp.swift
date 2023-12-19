@@ -12,11 +12,15 @@ import ComposableArchitecture
 struct AudioBooksApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView(
-                store: Store(initialState: VoiceMemo.State(date: Date(), duration: 5, url: Bundle.main.url(forResource: "sample3_out", withExtension: "aac")!, currentTime: 0)) {
-                    VoiceMemo()._printChanges()
-                }
-            )
+            ContentView(store: Store(initialState: VoiceMemo.State(songs: [.init(title: "sample3",
+                                                                                 resourceName: "sample3",
+                                                                                 image: "sample3"),
+                                                                           .init(title: "dwsample1-aac",
+                                                                                 resourceName: "dwsample1-aac",
+                                                                                 image: "dwsample1-aac")]),
+                                     reducer: {
+                VoiceMemo()
+            }))
         }
     }
 }
