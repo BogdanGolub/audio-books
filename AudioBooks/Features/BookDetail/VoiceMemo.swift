@@ -90,6 +90,19 @@ struct VoiceMemo {
             case xTwo = 2
             case xTwoHalf = 2.5
             
+            var next: Rates {
+                switch self {
+                case .xOne:
+                    return .xOneHalf
+                case .xOneHalf:
+                    return .xTwo
+                case .xTwo:
+                    return .xTwoHalf
+                case .xTwoHalf:
+                    return .xOne
+                }
+            }
+            
             var title: String {
                 switch self {
                 case .xOne:
@@ -117,7 +130,7 @@ struct VoiceMemo {
         case isPlayerEnabled(Bool)
         case onEditingChanged(Bool)
         case clearSeek
-        case setRate(State.Rates)
+        case changeRate
         case next
         case backward
         case nextFive
@@ -141,8 +154,8 @@ struct VoiceMemo {
                 return move(state: &state, isForward: false)
             case .next:
                 return move(state: &state, isForward: true)
-            case .setRate(let rate):
-                state.rate = rate
+            case .changeRate:
+                state.rate = state.rate.next
                 return .run { [rate = state.rate] send in
                     let _ = try await self.audioPlayer.rate(rate.rawValue)
                 }
@@ -343,26 +356,19 @@ struct ContentView: View {
                     }
                 }
                 
+                Button(action: {
+                    viewStore.send(.changeRate)
+                }) {
+                    Text(viewStore.rate.title)
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(.black)
+                        .padding(.all, 6)
+                        .background(.gray)
+                        .cornerRadius(4)
+                        .padding(.bottom, 20)
+                }
+                .buttonStyle(.plain)
                 
-                Text(viewStore.rate.title)
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(.black)
-                    .padding(.all, 6)
-                    .background(.gray)
-                    .cornerRadius(4)
-                    .contextMenu {
-                        
-                        ForEach(viewStore.allRates) { rate in
-                            Button {
-                                viewStore.send(.setRate(rate))
-                            } label: {
-                                HStack {
-                                    Text(rate.title)
-                                }
-                            }
-                        }
-                    }
-                    .padding(.bottom, 20)
                 
                 HStack(spacing: 30) {
                     Button(action: {
