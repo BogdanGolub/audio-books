@@ -12,13 +12,13 @@ public struct ThumbToggle: View {
     
     @Binding public var status:Bool
     @State public var isOpen:Bool
-    public var iconClose:String = "sun.max.fill"
-    public var iconClsClr:Color = .black.opacity(0.8)
-    public var backClose:Color = .black
+    public var iconOpen:String = "sun.max.fill"
+    public var iconOpnClr:Color = .black.opacity(0.8)
+    public var backOpen:Color = .black
     
-    public var iconOpen:String = "moon.stars.fill"
-    public var iconOpnClr:Color = .orange
-    public var backOpen:Color = .blue.opacity(0.6)
+    public var iconClose:String = "moon.stars.fill"
+    public var iconClsClr:Color = .orange
+    public var backClose:Color = .blue.opacity(0.6)
     
     
     public var thumbColor:Color = .white
@@ -44,8 +44,15 @@ public struct ThumbToggle: View {
             .fill(isOpen ? backOpen:backClose)
             .animation(.default, value: isOpen)
             .frame(width: 130, height: 72)
-            .overlay(alignment: isOpen ? .trailing:.leading) {
-                Circle().fill(thumbColor).padding(4).overlay {
+            .overlay(alignment: .trailing) {
+                Circle().fill(backClose).padding(4).overlay {
+                    Image(systemName: isOpen ? iconOpen:iconClose)
+                        .font(.callout).foregroundColor(isOpen ? iconOpnClr:iconOpnClr)
+                        .animation(.default, value: isOpen)
+                }
+            }
+            .overlay(alignment: .leading) {
+                Circle().fill(backOpen).padding(4).overlay {
                     Image(systemName: isOpen ? iconOpen:iconClose)
                         .font(.callout).foregroundColor(isOpen ? iconOpnClr:iconClsClr)
                         .animation(.default, value: isOpen)
@@ -68,7 +75,14 @@ public struct ThumbToggle: View {
 struct ThumbToggle_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            ThumbToggle(status: .constant(false))
+            ThumbToggle(status: .constant(false),
+                        iconClose: "headphones",
+                        iconClsClr: .white,
+                        backClose: .white,
+                        iconOpen: "text.alignleft",
+                        iconOpnClr: .black,
+                        backOpen: .blue,
+                        thumbColor: .white)
         } else {
             // Fallback on earlier versions
         }

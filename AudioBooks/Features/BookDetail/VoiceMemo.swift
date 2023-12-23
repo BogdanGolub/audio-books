@@ -16,7 +16,7 @@ struct VoiceMemo {
         var id: URL { self.current.id }
         var current: CurrentPlayback
         var mode = Mode.notPlaying
-        var isPlayerEnabled: Bool = true
+        var isPlayerEnabled: Bool = false
         
         var songs: IdentifiedArrayOf<VoiceMemo.State.Song>
         var rate: Rates = .xOne
@@ -355,6 +355,7 @@ struct ContentView: View {
                             .foregroundColor(Color(.systemGray))
                     }
                 }
+                .padding(.bottom, 4)
                 
                 Button(action: {
                     viewStore.send(.changeRate)
@@ -365,20 +366,20 @@ struct ContentView: View {
                         .padding(.all, 6)
                         .background(.gray)
                         .cornerRadius(4)
-                        .padding(.bottom, 20)
+                        .padding(.bottom, 40)
                 }
                 .buttonStyle(.plain)
                 
                 
-                HStack(spacing: 30) {
+                HStack(spacing: 36) {
                     Button(action: {
                         viewStore.send(.backward)
                     }) {
-                        Image(systemName: "backward.end")
+                        Image(systemName: "backward.end.fill")
                             .foregroundColor(.black)
-                            .imageScale(.large)
+                            .scaleEffect(1.2)
                     }
-                    .opacity(!viewStore.current.backwardAvailable ? 0.5 : 1)
+                    .opacity(!viewStore.current.backwardAvailable ? 0.3 : 1)
                     .disabled(!viewStore.current.backwardAvailable)
                     
                     Button(action: {
@@ -386,7 +387,7 @@ struct ContentView: View {
                     }) {
                         Image(systemName: "gobackward.5")
                             .foregroundColor(.black)
-                            .imageScale(.large)
+                            .scaleEffect(1.5)
                     }
                     
                     Button(action: {
@@ -394,7 +395,7 @@ struct ContentView: View {
                     }) {
                         Image(systemName: viewStore.mode.is(\.playing) ? "pause.fill" : "play.fill" )
                             .foregroundColor(.black)
-                            .imageScale(.large)
+                            .scaleEffect(2)
                     }
                     
                     Button(action: {
@@ -402,17 +403,17 @@ struct ContentView: View {
                     }) {
                         Image(systemName: "goforward.10")
                             .foregroundColor(.black)
-                            .imageScale(.large)
+                            .scaleEffect(1.5)
                     }
                     
                     Button(action: {
                         viewStore.send(.next)
                     }) {
-                        Image(systemName: "forward.end")
+                        Image(systemName: "forward.end.fill")
                             .foregroundColor(.black)
-                            .imageScale(.large)
+                            .scaleEffect(1.2)
                     }
-                    .opacity(!viewStore.current.forwardAvailable ? 0.5 : 1)
+                    .opacity(!viewStore.current.forwardAvailable ? 0.3 : 1)
                     .disabled(!viewStore.current.forwardAvailable)
                 }
                 .padding(.bottom, 32)
@@ -420,11 +421,18 @@ struct ContentView: View {
                 
                 
                 HStack {
-                    ThumbToggle(status: viewStore.binding(get: \.isPlayerEnabled, send: { .isPlayerEnabled($0) }), backClose: .orange, backOpen: .black, thumbColor: .blue)
+                    ThumbToggle(status: viewStore.binding(get: \.isPlayerEnabled, send: { .isPlayerEnabled($0) }),
+                                            iconClose: "headphones",
+                                            iconClsClr: .white,
+                                            backClose: .white,
+                                            iconOpen: "text.alignleft",
+                                            iconOpnClr: .black,
+                                            backOpen: .blue,
+                                            thumbColor: .white)
                 }
             }
             .padding()
-            .background(.white)
+            .background(Color(red: 254/255, green: 248/255, blue: 244/255))
         }
     }
 }
