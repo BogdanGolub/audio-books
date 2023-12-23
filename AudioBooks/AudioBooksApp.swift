@@ -20,6 +20,7 @@ struct AudioBooksApp: App {
                                                                                  image: "dwsample1-aac")]),
                                      reducer: {
                 VoiceMemo()
+                    ._printChanges()
             }))
         }
     }

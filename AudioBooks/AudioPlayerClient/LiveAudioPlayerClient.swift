@@ -77,12 +77,12 @@ private final class Delegate: NSObject, AVAudioPlayerDelegate, Sendable {
         
         super.init()
 //        activateSession()
-        player.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: CMTimeScale(NSEC_PER_SEC)), queue: DispatchQueue.main) {[weak self] (progressTime) in
+        player.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.1, preferredTimescale: CMTimeScale(NSEC_PER_SEC)), queue: DispatchQueue.main) {[weak self] (progressTime) in
 //            print("periodic time: \(CMTimeGetSeconds(progressTime))")
             
             guard let self else { return }
             
-            if self.player.currentItem?.status == .readyToPlay, progressTime.seconds > 0.5  {
+            if self.player.currentItem?.status == .readyToPlay, progressTime.seconds > 0.05  {
                 let currentTime = self.player.currentItem?.currentTime() ?? .zero
                 let duration = self.player.currentItem?.duration ?? .zero
                 self.didUpdateProgress(currentTime.seconds, duration.seconds)

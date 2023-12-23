@@ -7,109 +7,65 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "2E997704-0341-4318-8B3E-851D7A6AC268"
+            uuid = "D7F27FB6-D8C0-450F-A3E2-FE96B9AE86BD"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioBooks/Features/BookDetail/VoiceMemo.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "170"
-            endingLineNumber = "170"
-            landmarkName = "body"
-            landmarkType = "24">
+            startingLineNumber = "278"
+            endingLineNumber = "278"
+            landmarkName = "move(state:isForward:)"
+            landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "2E997704-0341-4318-8B3E-851D7A6AC268 - 23c791645b08b5af"
+                  uuid = "D7F27FB6-D8C0-450F-A3E2-FE96B9AE86BD - a5a8dc4ca757a8ad"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "(5) suspend resume partial function for closure #4 @Sendable (ComposableArchitecture.Send&lt;AudioBooks.VoiceMemo.Action&gt;) async throws -&gt; () in closure #1 (inout AudioBooks.VoiceMemo.State, AudioBooks.VoiceMemo.Action) -&gt; ComposableArchitecture.Effect&lt;AudioBooks.VoiceMemo.Action&gt; in AudioBooks.VoiceMemo.body.getter : some"
+                  symbolName = "AudioBooks.VoiceMemo.move(state: inout AudioBooks.VoiceMemo.State, isForward: Swift.Bool) -&gt; ComposableArchitecture.Effect&lt;AudioBooks.VoiceMemo.Action&gt;"
                   moduleName = "AudioBooks"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/bohdan/Projects/audio-books/AudioBooks/Features/BookDetail/VoiceMemo.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "158"
-                  endingLineNumber = "158"
-                  offsetFromSymbolStart = "140">
+                  startingLineNumber = "262"
+                  endingLineNumber = "262"
+                  offsetFromSymbolStart = "1680">
                </Location>
                <Location
-                  uuid = "2E997704-0341-4318-8B3E-851D7A6AC268 - f1c65b5c4fe482f2"
+                  uuid = "D7F27FB6-D8C0-450F-A3E2-FE96B9AE86BD - a5a8dc4ca757a8ad"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "(6) await resume partial function for closure #4 @Sendable (ComposableArchitecture.Send&lt;AudioBooks.VoiceMemo.Action&gt;) async throws -&gt; () in closure #1 (inout AudioBooks.VoiceMemo.State, AudioBooks.VoiceMemo.Action) -&gt; ComposableArchitecture.Effect&lt;AudioBooks.VoiceMemo.Action&gt; in AudioBooks.VoiceMemo.body.getter : some"
+                  symbolName = "AudioBooks.VoiceMemo.move(state: inout AudioBooks.VoiceMemo.State, isForward: Swift.Bool) -&gt; ComposableArchitecture.Effect&lt;AudioBooks.VoiceMemo.Action&gt;"
                   moduleName = "AudioBooks"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/bohdan/Projects/audio-books/AudioBooks/Features/BookDetail/VoiceMemo.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "158"
-                  endingLineNumber = "158"
-                  offsetFromSymbolStart = "36">
-               </Location>
-               <Location
-                  uuid = "2E997704-0341-4318-8B3E-851D7A6AC268 - a83c649e2a94e9a5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(7) suspend resume partial function for closure #4 @Sendable (ComposableArchitecture.Send&lt;AudioBooks.VoiceMemo.Action&gt;) async throws -&gt; () in closure #1 (inout AudioBooks.VoiceMemo.State, AudioBooks.VoiceMemo.Action) -&gt; ComposableArchitecture.Effect&lt;AudioBooks.VoiceMemo.Action&gt; in AudioBooks.VoiceMemo.body.getter : some"
-                  moduleName = "AudioBooks"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bohdan/Projects/audio-books/AudioBooks/Features/BookDetail/VoiceMemo.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "158"
-                  endingLineNumber = "158"
-                  offsetFromSymbolStart = "76">
-               </Location>
-               <Location
-                  uuid = "2E997704-0341-4318-8B3E-851D7A6AC268 - a83c649e2a94e9a5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(7) suspend resume partial function for closure #4 @Sendable (ComposableArchitecture.Send&lt;AudioBooks.VoiceMemo.Action&gt;) async throws -&gt; () in closure #1 (inout AudioBooks.VoiceMemo.State, AudioBooks.VoiceMemo.Action) -&gt; ComposableArchitecture.Effect&lt;AudioBooks.VoiceMemo.Action&gt; in AudioBooks.VoiceMemo.body.getter : some"
-                  moduleName = "AudioBooks"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bohdan/Projects/audio-books/AudioBooks/Features/BookDetail/VoiceMemo.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "158"
-                  endingLineNumber = "158"
-                  offsetFromSymbolStart = "172">
-               </Location>
-               <Location
-                  uuid = "2E997704-0341-4318-8B3E-851D7A6AC268 - 311168303c60dda3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(9) suspend resume partial function for closure #4 @Sendable (ComposableArchitecture.Send&lt;AudioBooks.VoiceMemo.Action&gt;) async throws -&gt; () in closure #1 (inout AudioBooks.VoiceMemo.State, AudioBooks.VoiceMemo.Action) -&gt; ComposableArchitecture.Effect&lt;AudioBooks.VoiceMemo.Action&gt; in AudioBooks.VoiceMemo.body.getter : some"
-                  moduleName = "AudioBooks"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bohdan/Projects/audio-books/AudioBooks/Features/BookDetail/VoiceMemo.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "158"
-                  endingLineNumber = "158"
-                  offsetFromSymbolStart = "148">
-               </Location>
-               <Location
-                  uuid = "2E997704-0341-4318-8B3E-851D7A6AC268 - afc4f04f7ad38c3d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(11) suspend resume partial function for closure #4 @Sendable (ComposableArchitecture.Send&lt;AudioBooks.VoiceMemo.Action&gt;) async throws -&gt; () in closure #1 (inout AudioBooks.VoiceMemo.State, AudioBooks.VoiceMemo.Action) -&gt; ComposableArchitecture.Effect&lt;AudioBooks.VoiceMemo.Action&gt; in AudioBooks.VoiceMemo.body.getter : some"
-                  moduleName = "AudioBooks"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bohdan/Projects/audio-books/AudioBooks/Features/BookDetail/VoiceMemo.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "158"
-                  endingLineNumber = "158"
-                  offsetFromSymbolStart = "100">
+                  startingLineNumber = "262"
+                  endingLineNumber = "262"
+                  offsetFromSymbolStart = "1716">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3C84D0B9-8DA4-4AE3-A1C1-55E0CC8E3A16"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AudioBooks/Features/BookDetail/VoiceMemo.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "262"
+            endingLineNumber = "262"
+            landmarkName = "move(state:isForward:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

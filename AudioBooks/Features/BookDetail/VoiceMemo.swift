@@ -12,28 +12,59 @@ import SwiftUI
 struct VoiceMemo {
     struct State: Equatable, Identifiable {
         @PresentationState var alert: AlertState<Action.Alert>?
-        var title = ""
-        var image = ""
-        var duration: TimeInterval = .zero
-        var url: URL = .temporaryDirectory
         
+        var id: URL { self.current.id }
+        var current: CurrentPlayback
         var mode = Mode.notPlaying
         var isPlayerEnabled: Bool = true
-        var currentTime: TimeInterval = .zero
-        var slide: TimeInterval = 0
-        var isSeekInProgress: Bool? = false // nil for avoiding jumping slider from old player value to slide value
-        var rate: Rates = .xOne
         
         var songs: IdentifiedArrayOf<VoiceMemo.State.Song>
+        var rate: Rates = .xOne
         let allRates: [Rates] = Rates.allCases
         
-        var id: URL { self.url }
+        init(songs: IdentifiedArrayOf<VoiceMemo.State.Song>) {
+            self.songs = songs
+            
+            if let song = songs.first {
+                self.current = .init(title: song.title,
+                                     image: song.image,
+                                     index: 0,
+                                     url: song.url,
+                                     duration: 0,
+                                     currentTime: 0,
+                                     backwardAvailable: false,
+                                     forwardAvailable: songs.endIndex - 1 != 0)
+            } else {
+                self.current = .init(title: "",
+                                     image: "",
+                                     index: 0,
+                                     url: .temporaryDirectory,
+                                     duration: 0,
+                                     currentTime: 0, 
+                                     backwardAvailable: false,
+                                     forwardAvailable: false)
+            }
+        }
         
         @CasePathable
         @dynamicMemberLookup
         enum Mode: Equatable {
             case notPlaying
             case playing(progress: Double)
+        }
+        
+        struct CurrentPlayback: Equatable, Identifiable {
+            var title: String
+            var image: String
+            var index: Int
+            var url: URL
+            var duration: TimeInterval
+            var currentTime: TimeInterval
+            var slide: TimeInterval = 0
+            var isSeekInProgress: Bool? = false // nil for avoiding jumping slider from old player value to slide value
+            var backwardAvailable: Bool
+            var forwardAvailable: Bool
+            var id: URL { self.url }
         }
         
         struct Song: Equatable, Identifiable {
@@ -49,7 +80,6 @@ struct VoiceMemo {
                 self.image = image
             }
         }
-        
         
         enum Rates: Float, CaseIterable, Identifiable {
             
@@ -90,6 +120,8 @@ struct VoiceMemo {
         case setRate(State.Rates)
         case next
         case backward
+        case nextFive
+        case backwardFive
         
         enum Alert: Equatable {}
     }
@@ -101,10 +133,14 @@ struct VoiceMemo {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+            case .nextFive:
+                return seekFive(state: &state, isForward: true)
+            case .backwardFive:
+                return seekFive(state: &state, isForward: false)
             case .backward:
-                return .none
+                return move(state: &state, isForward: false)
             case .next:
-                return .none
+                return move(state: &state, isForward: true)
             case .setRate(let rate):
                 state.rate = rate
                 return .run { [rate = state.rate] send in
@@ -112,19 +148,19 @@ struct VoiceMemo {
                 }
             case let .slide(time):
                 let sharedEffect = self.sharedComputation(state: &state, time: time)
-                state.slide = time
+                state.current.slide = time
                 return sharedEffect
                 
             case .clearSeek:
-                state.isSeekInProgress = nil
+                state.current.isSeekInProgress = nil
                 return .none
             case let .onEditingChanged(editing):
-                state.isSeekInProgress = editing
+                state.current.isSeekInProgress = editing
                 
                 if editing {
                     return .none
                 } else {
-                    return .run { [slide = state.slide] send in
+                    return .run { [slide = state.current.slide] send in
                         let _ = try await self.audioPlayer.seek(slide)
                         await send(.clearSeek)
                     }
@@ -150,12 +186,12 @@ struct VoiceMemo {
                 )
                 
             case .audioPlayerClient(.success((let success, let progress, let duration))):
-                state.duration = duration
+                state.current.duration = duration
                 if success {
                     state.mode = .notPlaying
-                    state.duration = duration
+                    state.current.duration = duration
                     return .cancel(id: CancelID.play)
-                } else if state.isSeekInProgress == false || state.isSeekInProgress == nil {
+                } else if state.current.isSeekInProgress == false || state.current.isSeekInProgress == nil {
                     return .send(.timerUpdated(progress))
                 } else {
                     return .none
@@ -166,7 +202,7 @@ struct VoiceMemo {
                 case .notPlaying:
                     state.mode = .playing(progress: 0)
                     
-                    return .run { [url = state.url, rate = state.rate] send in
+                    return .run { [url = state.current.url, rate = state.rate] send in
                         await send(.playbackStarted)
                         
                         //                        async let playAudio: Void = send(
@@ -199,28 +235,66 @@ struct VoiceMemo {
                 return sharedEffect
                 
             case let .titleTextFieldChanged(text):
-                state.title = text
+                state.current.title = text
                 return .none
             }
         }
         .ifLet(\.$alert, action: \.alert)
     }
     
+    func seekFive(state: inout State, isForward: Bool) -> Effect<Action> {
+        if isForward {
+            let newTime = (state.current.currentTime + 10) > state.current.duration ? state.current.duration : (state.current.currentTime + 10)
+            return .concatenate(.send(.onEditingChanged(true)),
+                                .send(.slide(newTime)),
+                                .send(.onEditingChanged(false)))
+        } else {
+            let newTime = (state.current.currentTime - 5) < 0 ? 0 : (state.current.currentTime - 5)
+            return .concatenate(.send(.onEditingChanged(true)),
+                                .send(.slide(newTime)),
+                                .send(.onEditingChanged(false)))
+        }
+    }
+    
+    func move(state: inout State, isForward: Bool) -> Effect<Action> {
+        let nextIndex: Int?
+        if isForward {
+            nextIndex = state.songs.endIndex - 1 != state.current.index ? state.songs.index(after: state.current.index) : nil
+        } else {
+            nextIndex = state.songs.startIndex != state.current.index ? state.songs.index(before: state.current.index) : nil
+        }
+        
+        guard let nextIndex else { return .none }
+        
+        let song = state.songs[nextIndex]
+        state.current = .init(title: song.title, 
+                              image: song.image,
+                              index: nextIndex,
+                              url: song.url,
+                              duration: 0,
+                              currentTime: 0,
+                              backwardAvailable: state.songs.startIndex != nextIndex,
+                              forwardAvailable: state.songs.endIndex - 1 != nextIndex)
+        let isPlaying = state.mode != State.Mode.notPlaying
+        state.mode = .notPlaying
+        return isPlaying ? .concatenate(.cancel(id: CancelID.play), .send(.playButtonTapped)) : .none
+    }
+    
     func sharedComputation(state: inout State, time: TimeInterval) -> Effect<Action> {
         
-        guard state.isSeekInProgress != nil else {
-            state.isSeekInProgress = false
+        guard state.current.isSeekInProgress != nil else {
+            state.current.isSeekInProgress = false
             return .none
         }
         
         switch state.mode {
         case .notPlaying:
-            state.currentTime = 0
+            state.current.currentTime = 0
         case .playing:
             //                    state.mode = .playing(progress: time / state.duration)
-            let currentTime = time > state.duration ? state.duration : time
+            let currentTime = time > state.current.duration ? state.current.duration : time
             
-            state.currentTime = currentTime
+            state.current.currentTime = currentTime
             state.mode = .playing(progress: currentTime)
         }
         return .none
@@ -235,7 +309,7 @@ struct ContentView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack {
                 
-                Image("book")
+                Image(viewStore.current.image)
                     .resizable()
                     .scaledToFit()
                     .cornerRadius(12)
@@ -243,12 +317,12 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                Text("KEY POINT 2 OF 10")
+                Text("KEY POINT \(viewStore.current.index + 1) OF \(viewStore.songs.count)")
                     .multilineTextAlignment(.center)
                     .foregroundColor(.gray)
                     .font(.system(size: 16, weight: .semibold))
                 
-                Text("Design is not how a thing looks, but how it works")
+                Text(viewStore.current.title)
                     .multilineTextAlignment(.center)
                 
                 
@@ -258,11 +332,11 @@ struct ContentView: View {
                             .font(.footnote.monospacedDigit())
                             .foregroundColor(Color(.systemGray))
                     }
-                    Slider(value: viewStore.binding(get: \.currentTime, send: { .slide($0) }), in: 0...viewStore.duration, onEditingChanged: { editing in
+                    Slider(value: viewStore.binding(get: \.current.currentTime, send: { .slide($0) }), in: 0...viewStore.current.duration, onEditingChanged: { editing in
                         viewStore.send(.onEditingChanged(editing))
                     })
                     .padding(.horizontal)
-                    dateComponentsFormatter.string(from: viewStore.duration).map {
+                    dateComponentsFormatter.string(from: viewStore.current.duration).map {
                         Text($0)
                             .font(.footnote.monospacedDigit())
                             .foregroundColor(Color(.systemGray))
@@ -292,15 +366,17 @@ struct ContentView: View {
                 
                 HStack(spacing: 30) {
                     Button(action: {
-                        
+                        viewStore.send(.backward)
                     }) {
                         Image(systemName: "backward.end")
                             .foregroundColor(.black)
                             .imageScale(.large)
                     }
+                    .opacity(!viewStore.current.backwardAvailable ? 0.5 : 1)
+                    .disabled(!viewStore.current.backwardAvailable)
                     
                     Button(action: {
-                        
+                        viewStore.send(.backwardFive)
                     }) {
                         Image(systemName: "gobackward.5")
                             .foregroundColor(.black)
@@ -316,7 +392,7 @@ struct ContentView: View {
                     }
                     
                     Button(action: {
-                        
+                        viewStore.send(.nextFive)
                     }) {
                         Image(systemName: "goforward.10")
                             .foregroundColor(.black)
@@ -324,12 +400,14 @@ struct ContentView: View {
                     }
                     
                     Button(action: {
-                        
+                        viewStore.send(.next)
                     }) {
                         Image(systemName: "forward.end")
                             .foregroundColor(.black)
                             .imageScale(.large)
                     }
+                    .opacity(!viewStore.current.forwardAvailable ? 0.5 : 1)
+                    .disabled(!viewStore.current.forwardAvailable)
                 }
                 .padding(.bottom, 32)
                 
