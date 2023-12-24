@@ -433,6 +433,7 @@ struct ContentView: View {
             }
             .padding()
             .background(Color(red: 254/255, green: 248/255, blue: 244/255))
+            .alert(store: self.store.scope(state: \.$alert, action: \.alert))
         }
     }
 }
