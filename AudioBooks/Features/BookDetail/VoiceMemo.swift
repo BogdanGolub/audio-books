@@ -43,6 +43,7 @@ struct VoiceMemo {
                                      currentTime: 0, 
                                      backwardAvailable: false,
                                      forwardAvailable: false)
+                
             }
         }
         
@@ -135,6 +136,8 @@ struct VoiceMemo {
         case backward
         case nextFive
         case backwardFive
+        case onAppear
+        case resume
         
         enum Alert: Equatable {}
     }
@@ -146,6 +149,24 @@ struct VoiceMemo {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+            case .onAppear:
+                return .run { [url = state.current.url,
+                               rate = state.rate,
+                               time = state.current.currentTime,
+                               mode = state.mode] send in
+                    
+                    let playerStream = try await self.audioPlayer.load(url: url, rate: rate.rawValue, time: time)
+                
+                    if mode != .notPlaying {
+                        await send(.resume)
+                    }
+                    
+                    for try await item in playerStream {
+                        await send(.audioPlayerClient(.success(item)))
+                    }
+                    
+                }
+                .cancellable(id: CancelID.play, cancelInFlight: true)
             case .nextFive:
                 return seekFive(state: &state, isForward: true)
             case .backwardFive:
@@ -209,37 +230,23 @@ struct VoiceMemo {
                 } else {
                     return .none
                 }
-                
+            case .resume:
+                return .run { [time = state.current.currentTime] send in
+                    let _ = try await self.audioPlayer.resume(time)
+                }
             case .playButtonTapped:
                 switch state.mode {
                 case .notPlaying:
                     state.mode = .playing(progress: 0)
                     
-                    return .run { [url = state.current.url, rate = state.rate] send in
-                        await send(.playbackStarted)
-                        
-                        //                        async let playAudio: Void = send(
-                        //                            .audioPlayerClient(Result { try await self.audioPlayer.play(url) })
-                        //                        )
-                        let playerStream = try await self.audioPlayer.play(url: url, rate: rate.rawValue)
-                        
-                        //                        var start: TimeInterval = 0
-                        //                        for await _ in self.clock.timer(interval: .milliseconds(500)) {
-                        //                            start += 0.5
-                        //                            await send(.timerUpdated(start))
-                        //                        }
-                        
-                        for try await item in playerStream {
-                            await send(.audioPlayerClient(.success(item)))
-                        }
-                        
-                        //                        await playAudio
+                    return .run { [time = state.current.currentTime] send in
+                        let _ = try await self.audioPlayer.resume(time)
                     }
-                    .cancellable(id: CancelID.play, cancelInFlight: true)
-                    
                 case .playing:
                     state.mode = .notPlaying
-                    return .cancel(id: CancelID.play)
+                    return .run { _ in
+                        let _ = try await self.audioPlayer.pause()
+                    }
                 }
                 
             case let .timerUpdated(time):
@@ -288,9 +295,9 @@ struct VoiceMemo {
                               currentTime: 0,
                               backwardAvailable: state.songs.startIndex != nextIndex,
                               forwardAvailable: state.songs.endIndex - 1 != nextIndex)
-        let isPlaying = state.mode != State.Mode.notPlaying
-        state.mode = .notPlaying
-        return isPlaying ? .concatenate(.cancel(id: CancelID.play), .send(.playButtonTapped)) : .none
+       
+        return .concatenate(.cancel(id: CancelID.play),
+                            .send(.onAppear))
     }
     
     func sharedComputation(state: inout State, time: TimeInterval) -> Effect<Action> {
@@ -302,7 +309,11 @@ struct VoiceMemo {
         
         switch state.mode {
         case .notPlaying:
-            state.current.currentTime = 0
+//            state.current.currentTime = 0
+            //                    state.mode = .playing(progress: time / state.duration)
+            let currentTime = time > state.current.duration ? state.current.duration : time
+            
+            state.current.currentTime = currentTime
         case .playing:
             //                    state.mode = .playing(progress: time / state.duration)
             let currentTime = time > state.current.duration ? state.current.duration : time
@@ -341,7 +352,7 @@ struct ContentView: View {
                 
                 
                 HStack(spacing: 0) {
-                    dateComponentsFormatter.string(from: viewStore.mode.playing ?? 0).map {
+                    dateComponentsFormatter.string(from: viewStore.current.currentTime).map {
                         Text($0)
                             .font(.footnote.monospacedDigit())
                             .foregroundColor(Color(.systemGray))
@@ -397,8 +408,7 @@ struct ContentView: View {
                     }
                     
                     Button(action: {
-//                        viewStore.send(.playButtonTapped)
-                        viewStore.send(.playbackFailed)
+                        viewStore.send(.playButtonTapped)
                     }) {
                         Image(systemName: viewStore.mode.is(\.playing) ? "pause.fill" : "play.fill" )
                             .foregroundColor(.black)
@@ -434,6 +444,7 @@ struct ContentView: View {
             .padding()
             .background(Color(red: 254/255, green: 248/255, blue: 244/255))
             .alert(store: self.store.scope(state: \.$alert, action: \.alert))
+            .onAppear(perform: { viewStore.send(.onAppear) })
         }
     }
 }

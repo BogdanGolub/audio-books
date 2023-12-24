@@ -10,14 +10,16 @@ import Foundation
 
 @DependencyClient
 struct AudioPlayerClient {
-    var play: @Sendable (_ url: URL, _ rate: Float) async throws -> AsyncThrowingStream<(Bool, TimeInterval, TimeInterval), Error>
+    var load: @Sendable (_ url: URL, _ rate: Float, _ time: TimeInterval) async throws -> AsyncThrowingStream<(Bool, TimeInterval, TimeInterval), Error>
     var seek: @Sendable (TimeInterval) async throws -> Bool
     var rate: @Sendable (Float) async throws -> Bool
+    var resume: @Sendable (TimeInterval) async throws -> Bool
+    var pause: @Sendable () async throws -> Bool
 }
 
 extension AudioPlayerClient: TestDependencyKey {
     static let previewValue = Self(
-        play: { _, _ in
+        load: { _, _, _ in
             
             return AsyncThrowingStream { continuation in
                 
@@ -33,7 +35,10 @@ extension AudioPlayerClient: TestDependencyKey {
                 }
             }
         }) { time in true
-        } rate: { _ in true }
+        } rate: { _ in true
+        } resume: { _ in true
+        } pause: { true
+        }
 }
 
 extension DependencyValues {

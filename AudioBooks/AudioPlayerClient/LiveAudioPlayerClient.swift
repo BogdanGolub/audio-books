@@ -12,7 +12,7 @@ extension AudioPlayerClient: DependencyKey {
     
     static let player = AVPlayer()
     
-    static let liveValue = Self.init { url, rate in
+    static let liveValue = Self.init { url, rate, time in
         let stream = AsyncThrowingStream<(Bool, TimeInterval, TimeInterval), Error> { continuation in
             do {
                 let delegate = try Delegate(player: AudioPlayerClient.player,
@@ -27,7 +27,9 @@ extension AudioPlayerClient: DependencyKey {
                         continuation.finish(throwing: error)
                     }
                 )
-                delegate.player.play()
+                let myTime = CMTime(seconds: time, preferredTimescale: 60000)
+                delegate.player.seek(to: myTime, toleranceBefore: .zero, toleranceAfter: .zero)
+//                delegate.player.play()
                 continuation.onTermination = { status in
                     print("status \(status)")
                     delegate.player.pause()
@@ -43,6 +45,14 @@ extension AudioPlayerClient: DependencyKey {
         return true
     } rate: { rate in
         player.playImmediately(atRate: rate)
+        return true
+    } resume: { time in
+        let myTime = CMTime(seconds: time, preferredTimescale: 60000)
+        player.seek(to: myTime, toleranceBefore: .zero, toleranceAfter: .zero)
+        player.play()
+        return true
+    } pause: {
+        player.pause()
         return true
     }
 // url in
@@ -74,8 +84,18 @@ private final class Delegate: NSObject, AVAudioPlayerDelegate, Sendable {
         player.defaultRate = rate
         player.rate = rate
         player.replaceCurrentItem(with: item)
-        
+        player.pause()
         super.init()
+        
+        Task {
+            let duration = await try? self.player.currentItem?.asset.load(.duration) ?? .zero
+            
+            await MainActor.run { [weak self] in
+                self?.didUpdateProgress(0, duration?.seconds ?? .zero)
+            }
+        }
+        
+        
 //        activateSession()
         player.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.1, preferredTimescale: CMTimeScale(NSEC_PER_SEC)), queue: DispatchQueue.main) {[weak self] (progressTime) in
 //            print("periodic time: \(CMTimeGetSeconds(progressTime))")
