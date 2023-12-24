@@ -334,6 +334,7 @@ struct ContentView: View {
                     .multilineTextAlignment(.center)
                     .foregroundColor(.gray)
                     .font(.system(size: 16, weight: .semibold))
+                    .padding(.bottom, 8)
                 
                 Text(viewStore.current.title)
                     .multilineTextAlignment(.center)
@@ -348,6 +349,11 @@ struct ContentView: View {
                     Slider(value: viewStore.binding(get: \.current.currentTime, send: { .slide($0) }), in: 0...viewStore.current.duration, onEditingChanged: { editing in
                         viewStore.send(.onEditingChanged(editing))
                     })
+                    .accentColor(Color(red: 42/255, green: 100/255, blue: 246/255))
+                    .onAppear {
+                        UISlider.appearance().setThumbImage(UIImage(systemName: "circle.fill"), for: .normal)
+    //                    UISlider.appearance().setThumbTintColor(.red) // Set the thumb color to red
+                    }
                     .padding(.horizontal)
                     dateComponentsFormatter.string(from: viewStore.current.duration).map {
                         Text($0)
@@ -391,7 +397,8 @@ struct ContentView: View {
                     }
                     
                     Button(action: {
-                        viewStore.send(.playButtonTapped)
+//                        viewStore.send(.playButtonTapped)
+                        viewStore.send(.playbackFailed)
                     }) {
                         Image(systemName: viewStore.mode.is(\.playing) ? "pause.fill" : "play.fill" )
                             .foregroundColor(.black)
