@@ -12,20 +12,27 @@ public struct ThumbToggle: View {
     
     @Binding public var status:Bool
     @State public var isOpen:Bool
-    public var iconOpen:String = "sun.max.fill"
-    public var iconOpnClr:Color = .black.opacity(0.8)
-    public var backOpen:Color = .black
+    public var iconClose:String = "sun.max.fill"
+    public var iconClsClr:Color = .black.opacity(0.8)
+    public var backClose:Color = .black
     
-    public var iconClose:String = "moon.stars.fill"
-    public var iconClsClr:Color = .orange
-    public var backClose:Color = .blue.opacity(0.6)
+    public var iconOpen:String = "moon.stars.fill"
+    public var iconOpnClr:Color = .orange
+    public var backOpen:Color = .blue.opacity(0.6)
     
     
     public var thumbColor:Color = .white
     
     
     
-    public init(status: Binding<Bool>, iconClose:String = "sun.max.fill", iconClsClr:Color = .orange, backClose:Color = .black,iconOpen:String = "moon.stars.fill",iconOpnClr:Color = .black.opacity(0.8),backOpen:Color = .blue.opacity(0.6),thumbColor:Color = .white) {
+    public init(status: Binding<Bool>,
+                iconClose:String = "headphones",
+                iconClsClr:Color = .white,
+                backClose:Color = .white,
+                iconOpen:String = "text.alignleft",
+                iconOpnClr:Color = .white,
+                backOpen:Color = .white,
+                thumbColor:Color = Color(red: 42/255, green: 100/255, blue: 246/255)) {
         _status = status
         self.isOpen = status.wrappedValue
         self.iconClose = iconClose
@@ -42,29 +49,35 @@ public struct ThumbToggle: View {
     public var body: some View {
         Capsule(style: .continuous)
             .fill(isOpen ? backOpen:backClose)
+            .overlay(
+                Capsule(style: .continuous)
+                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+            )
             .animation(.default, value: isOpen)
             .frame(width: 130, height: 72)
-            .overlay(alignment: .trailing) {
-                Circle().fill(backClose).padding(4).overlay {
+            .overlay(alignment: isOpen ? .trailing:.leading) {
+                Circle().fill(thumbColor).padding(4).overlay {
                     Image(systemName: isOpen ? iconOpen:iconClose)
-                        .font(.callout).foregroundColor(isOpen ? iconOpnClr:iconOpnClr)
+                        .scaleEffect(1.2)
+                        .font(.callout).foregroundColor(isOpen ? iconOpnClr:iconClsClr)
                         .animation(.default, value: isOpen)
                 }
             }
-            .overlay(alignment: .leading) {
-                Circle().fill(backOpen).padding(4).overlay {
-                    Image(systemName: isOpen ? iconOpen:iconClose)
-                        .font(.callout).foregroundColor(isOpen ? iconOpnClr:iconClsClr)
+            .overlay(alignment: !isOpen ? .trailing:.leading) {
+                Circle().fill(.clear).padding(4).overlay {
+                    Image(systemName: !isOpen ? iconOpen:iconClose)
+                        .scaleEffect(1.2)
+                        .font(.callout).foregroundColor(.black)
                         .animation(.default, value: isOpen)
                 }
             }
         
             .onTapGesture {
-                withAnimation(.spring(response: 0.6, dampingFraction: 0.52)) {
+                withAnimation(.spring(response: 0.6, dampingFraction: 0.825)) {
                     status.toggle()
                 }
             }.onChange(of: status) { newValue in
-                withAnimation(.spring(response: 0.6, dampingFraction: 0.52)) {
+                withAnimation(.spring(response: 0.6, dampingFraction: 0.825)) {
                     isOpen = newValue
                 }
             }
@@ -75,14 +88,10 @@ public struct ThumbToggle: View {
 struct ThumbToggle_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            ThumbToggle(status: .constant(false),
-                        iconClose: "headphones",
-                        iconClsClr: .white,
-                        backClose: .white,
-                        iconOpen: "text.alignleft",
-                        iconOpnClr: .black,
-                        backOpen: .blue,
-                        thumbColor: .white)
+            VStack {
+                ThumbToggle(status: .constant(false))
+                ThumbToggle(status: .constant(true))
+            }
         } else {
             // Fallback on earlier versions
         }

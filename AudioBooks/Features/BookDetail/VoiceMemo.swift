@@ -16,7 +16,7 @@ struct VoiceMemo {
         var id: URL { self.current.id }
         var current: CurrentPlayback
         var mode = Mode.notPlaying
-        var isPlayerEnabled: Bool = false
+        var isReaderEnabled: Bool = false
         
         var songs: IdentifiedArrayOf<VoiceMemo.State.Song>
         var rate: Rates = .xOne
@@ -127,7 +127,7 @@ struct VoiceMemo {
         case titleTextFieldChanged(String)
         case playbackStarted
         case playbackFailed
-        case isPlayerEnabled(Bool)
+        case isReaderEnabled(Bool)
         case onEditingChanged(Bool)
         case clearSeek
         case changeRate
@@ -178,8 +178,8 @@ struct VoiceMemo {
                         await send(.clearSeek)
                     }
                 }
-            case let .isPlayerEnabled(enabled):
-                state.isPlayerEnabled = enabled
+            case let .isReaderEnabled(enabled):
+                state.isReaderEnabled = enabled
                 return .none
             case .playbackFailed:
                 state.alert = AlertState { TextState("Voice memo playback failed.") }
@@ -364,7 +364,7 @@ struct ContentView: View {
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(.black)
                         .padding(.all, 6)
-                        .background(.gray)
+                        .background(.gray.opacity(0.3))
                         .cornerRadius(4)
                         .padding(.bottom, 40)
                 }
@@ -421,14 +421,7 @@ struct ContentView: View {
                 
                 
                 HStack {
-                    ThumbToggle(status: viewStore.binding(get: \.isPlayerEnabled, send: { .isPlayerEnabled($0) }),
-                                            iconClose: "headphones",
-                                            iconClsClr: .white,
-                                            backClose: .white,
-                                            iconOpen: "text.alignleft",
-                                            iconOpnClr: .black,
-                                            backOpen: .blue,
-                                            thumbColor: .white)
+                    ThumbToggle(status: viewStore.binding(get: \.isReaderEnabled, send: { .isReaderEnabled($0) }))
                 }
             }
             .padding()
