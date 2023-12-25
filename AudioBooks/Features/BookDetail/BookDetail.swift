@@ -1,5 +1,5 @@
 //
-//  VoiceMemo.swift
+//  BookDetail.swift
 //  AudioBooks
 //
 //  Created by Bohdan on 14.12.2023.
@@ -9,7 +9,7 @@ import ComposableArchitecture
 import SwiftUI
 
 @Reducer
-struct VoiceMemo {
+struct BookDetail {
     struct State: Equatable, Identifiable {
         @PresentationState var alert: AlertState<Action.Alert>?
         
@@ -18,11 +18,11 @@ struct VoiceMemo {
         var mode = Mode.notPlaying
         var isReaderEnabled: Bool = false
         
-        var songs: IdentifiedArrayOf<VoiceMemo.State.Song>
+        var songs: IdentifiedArrayOf<BookDetail.State.Song>
         var rate: Rates = .xOne
         let allRates: [Rates] = Rates.allCases
         
-        init(songs: IdentifiedArrayOf<VoiceMemo.State.Song>) {
+        init(songs: IdentifiedArrayOf<BookDetail.State.Song>) {
             self.songs = songs
             
             if let song = songs.first {
@@ -206,9 +206,6 @@ struct VoiceMemo {
                 state.alert = AlertState { TextState("Voice memo playback failed.") }
                 return .none
             case .playbackStarted:
-                //              for memoID in state.voiceMemos.ids where memoID != id {
-                //                state.voiceMemos[id: memoID]?.mode = .notPlaying
-                //              }
                 return .none
             case .alert:
                 return .none
@@ -224,7 +221,8 @@ struct VoiceMemo {
                 if success {
                     state.mode = .notPlaying
                     state.current.duration = duration
-                    return .cancel(id: CancelID.play)
+                    state.current.currentTime = 0
+                    return .concatenate(.cancel(id: CancelID.play), .send(.onAppear))
                 } else if state.current.isSeekInProgress == false || state.current.isSeekInProgress == nil {
                     return .send(.timerUpdated(progress))
                 } else {
@@ -250,7 +248,6 @@ struct VoiceMemo {
                 }
                 
             case let .timerUpdated(time):
-                //                guard !state.isSeekInProgress else { return .none }
                 let sharedEffect = self.sharedComputation(state: &state, time: time)
                 return sharedEffect
                 
@@ -309,8 +306,6 @@ struct VoiceMemo {
         
         switch state.mode {
         case .notPlaying:
-//            state.current.currentTime = 0
-            //                    state.mode = .playing(progress: time / state.duration)
             let currentTime = time > state.current.duration ? state.current.duration : time
             
             state.current.currentTime = currentTime
@@ -327,7 +322,7 @@ struct VoiceMemo {
 
 struct ContentView: View {
     
-    let store: StoreOf<VoiceMemo>
+    let store: StoreOf<BookDetail>
     
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
@@ -363,7 +358,6 @@ struct ContentView: View {
                     .accentColor(Color(red: 42/255, green: 100/255, blue: 246/255))
                     .onAppear {
                         UISlider.appearance().setThumbImage(UIImage(systemName: "circle.fill"), for: .normal)
-    //                    UISlider.appearance().setThumbTintColor(.red) // Set the thumb color to red
                     }
                     .padding(.horizontal)
                     dateComponentsFormatter.string(from: viewStore.current.duration).map {
@@ -449,20 +443,14 @@ struct ContentView: View {
     }
 }
 
-struct CustomToggleStyle: ToggleStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        // Your implementation
-    }
-}
-
 #Preview {
-    ContentView(store: Store(initialState: VoiceMemo.State(songs: [.init(title: "sample3",
+    ContentView(store: Store(initialState: BookDetail.State(songs: [.init(title: "sample3",
                                                                          resourceName: "sample3",
                                                                          image: "sample3"),
                                                                    .init(title: "dwsample1-aac",
                                                                          resourceName: "dwsample1-aac",
                                                                          image: "dwsample1-aac")]),
                              reducer: {
-        VoiceMemo()
+        BookDetail()
     }))
 }

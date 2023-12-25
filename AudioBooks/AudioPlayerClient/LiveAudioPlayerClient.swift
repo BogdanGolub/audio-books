@@ -29,9 +29,9 @@ extension AudioPlayerClient: DependencyKey {
                 )
                 let myTime = CMTime(seconds: time, preferredTimescale: 60000)
                 delegate.player.seek(to: myTime, toleranceBefore: .zero, toleranceAfter: .zero)
-//                delegate.player.play()
+
                 continuation.onTermination = { status in
-                    print("status \(status)")
+                    
                     delegate.player.pause()
                 }
             } catch {
@@ -55,10 +55,6 @@ extension AudioPlayerClient: DependencyKey {
         player.pause()
         return true
     }
-// url in
-        
-        //        return try await stream.first(where: { _ in true }) ?? (false, TimeInterval(0), TimeInterval(0))
-//    }, seek: { time in }
 }
 
 private final class Delegate: NSObject, AVAudioPlayerDelegate, Sendable {
@@ -88,17 +84,14 @@ private final class Delegate: NSObject, AVAudioPlayerDelegate, Sendable {
         super.init()
         
         Task {
-            let duration = await try? self.player.currentItem?.asset.load(.duration) ?? .zero
+            let duration = try? await self.player.currentItem?.asset.load(.duration) ?? .zero
             
             await MainActor.run { [weak self] in
                 self?.didUpdateProgress(0, duration?.seconds ?? .zero)
             }
         }
         
-        
-//        activateSession()
         player.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.1, preferredTimescale: CMTimeScale(NSEC_PER_SEC)), queue: DispatchQueue.main) {[weak self] (progressTime) in
-//            print("periodic time: \(CMTimeGetSeconds(progressTime))")
             
             guard let self else { return }
             

@@ -11,7 +11,7 @@
 		47583D052B2B0F3E000EDA73 /* SwiftySound in Frameworks */ = {isa = PBXBuildFile; productRef = 47583D042B2B0F3E000EDA73 /* SwiftySound */; };
 		47583D092B2B130D000EDA73 /* AudioPlayerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47583D082B2B130D000EDA73 /* AudioPlayerClient.swift */; };
 		47583D0B2B2B1378000EDA73 /* LiveAudioPlayerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47583D0A2B2B1378000EDA73 /* LiveAudioPlayerClient.swift */; };
-		47583D0D2B2B292A000EDA73 /* VoiceMemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47583D0C2B2B292A000EDA73 /* VoiceMemo.swift */; };
+		47583D0D2B2B292A000EDA73 /* BookDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47583D0C2B2B292A000EDA73 /* BookDetail.swift */; };
 		47583D0F2B2B3D42000EDA73 /* sample3.aac in Resources */ = {isa = PBXBuildFile; fileRef = 47583D0E2B2B3D42000EDA73 /* sample3.aac */; };
 		47583D122B2B6676000EDA73 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47583D112B2B6676000EDA73 /* DateFormatter.swift */; };
 		47583D142B2BA840000EDA73 /* sample31.aac in Resources */ = {isa = PBXBuildFile; fileRef = 47583D132B2BA840000EDA73 /* sample31.aac */; };
@@ -48,7 +48,7 @@
 		47583D012B2B02AE000EDA73 /* trackOne.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = trackOne.mp3; sourceTree = "<group>"; };
 		47583D082B2B130D000EDA73 /* AudioPlayerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerClient.swift; sourceTree = "<group>"; };
 		47583D0A2B2B1378000EDA73 /* LiveAudioPlayerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveAudioPlayerClient.swift; sourceTree = "<group>"; };
-		47583D0C2B2B292A000EDA73 /* VoiceMemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMemo.swift; sourceTree = "<group>"; };
+		47583D0C2B2B292A000EDA73 /* BookDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetail.swift; sourceTree = "<group>"; };
 		47583D0E2B2B3D42000EDA73 /* sample3.aac */ = {isa = PBXFileReference; lastKnownFileType = file; path = sample3.aac; sourceTree = "<group>"; };
 		47583D112B2B6676000EDA73 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		47583D132B2BA840000EDA73 /* sample31.aac */ = {isa = PBXFileReference; lastKnownFileType = file; path = sample31.aac; sourceTree = "<group>"; };
@@ -176,7 +176,7 @@
 		47C9060A2B29AF860082BBFE /* BookDetail */ = {
 			isa = PBXGroup;
 			children = (
-				47583D0C2B2B292A000EDA73 /* VoiceMemo.swift */,
+				47583D0C2B2B292A000EDA73 /* BookDetail.swift */,
 			);
 			path = BookDetail;
 			sourceTree = "<group>";
@@ -334,7 +334,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				47583D092B2B130D000EDA73 /* AudioPlayerClient.swift in Sources */,
-				47583D0D2B2B292A000EDA73 /* VoiceMemo.swift in Sources */,
+				47583D0D2B2B292A000EDA73 /* BookDetail.swift in Sources */,
 				47583D122B2B6676000EDA73 /* DateFormatter.swift in Sources */,
 				47583D0B2B2B1378000EDA73 /* LiveAudioPlayerClient.swift in Sources */,
 				47C906162B29D5BD0082BBFE /* CustomToggle.swift in Sources */,
