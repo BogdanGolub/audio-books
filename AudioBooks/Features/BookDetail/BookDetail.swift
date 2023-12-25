@@ -310,7 +310,6 @@ struct BookDetail {
             
             state.current.currentTime = currentTime
         case .playing:
-            //                    state.mode = .playing(progress: time / state.duration)
             let currentTime = time > state.current.duration ? state.current.duration : time
             
             state.current.currentTime = currentTime
