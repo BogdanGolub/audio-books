@@ -1,6 +1,10 @@
 # AudioBooks — SwiftUI + The Composable Architecture
 
+[![CI](https://github.com/BogdanGolub/audio-books/actions/workflows/ci.yml/badge.svg)](https://github.com/BogdanGolub/audio-books/actions/workflows/ci.yml)
+
 A compact audiobook player built to explore **The Composable Architecture (TCA)** on top of SwiftUI. One `@Reducer` drives playback, seeking, chapter navigation and speed control, while the audio engine lives behind a `@DependencyClient`, so the feature can be exercised in previews and tests without touching AVFoundation.
+
+Started as a take-home assignment (December 2023); revisited in 2026 to replace the template tests with real reducer tests (`TestStore`) and to run them on CI.
 
 ## Features
 
@@ -27,9 +31,15 @@ AudioBooks
 - `AudioPlayerClient.load` returns an `AsyncThrowingStream<(finished, progress, duration)>`; the reducer folds the stream into UI state and restarts playback for the next chapter when it finishes.
 - `previewValue` and the generated `testValue` keep SwiftUI previews and `TestStore` tests independent of real audio.
 
+## Tests and CI
+
+`AudioBooksTests` drives the `BookDetail` reducer through a `TestStore` with a controlled `AudioPlayerClient`: play/pause, seeking, speed changes, chapter navigation and the failure alert are asserted step by step, without a real player.
+
+GitHub Actions ([ci.yml](.github/workflows/ci.yml)) builds the app and runs the unit tests on an iOS simulator on every push.
+
 ## Stack
 
-Swift 5.9 · SwiftUI · TCA 1.x (`@Reducer`, `@DependencyClient`, `@CasePathable`) · AVFoundation · XCTest
+Swift 5 language mode · SwiftUI · TCA 1.5 (`@Reducer`, `@DependencyClient`, `@CasePathable`) · AVFoundation · XCTest · GitHub Actions
 
 ## Running
 
