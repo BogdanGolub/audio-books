@@ -141,14 +141,14 @@ final class BookDetailTests: XCTestCase {
         }
 
         await store.send(.nextFive)
-        await store.receive(\.onEditingChanged, true) {
+        await store.receive(\.onEditingChanged) {
             $0.current.isSeekInProgress = true
         }
-        await store.receive(\.slide, 30) {
+        await store.receive(\.slide) {
             $0.current.currentTime = 30
             $0.current.slide = 30
         }
-        await store.receive(\.onEditingChanged, false) {
+        await store.receive(\.onEditingChanged) {
             $0.current.isSeekInProgress = false
         }
         await store.receive(\.clearSeek) {
@@ -170,14 +170,14 @@ final class BookDetailTests: XCTestCase {
         }
 
         await store.send(.nextFive)
-        await store.receive(\.onEditingChanged, true) {
+        await store.receive(\.onEditingChanged) {
             $0.current.isSeekInProgress = true
         }
-        await store.receive(\.slide, 60) {
+        await store.receive(\.slide) {
             $0.current.currentTime = 60
             $0.current.slide = 60
         }
-        await store.receive(\.onEditingChanged, false) {
+        await store.receive(\.onEditingChanged) {
             $0.current.isSeekInProgress = false
         }
         await store.receive(\.clearSeek) {
